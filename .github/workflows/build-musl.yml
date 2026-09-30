@@ -50,13 +50,18 @@ jobs:
 
       - name: Build Binary
         run: |
+          cargo clean --target ${{ matrix.target }}
           cargo build --release --target ${{ matrix.target }}
+          # 确保文件存在并赋予可执行权限
+          chmod +x target/${{ matrix.target }}/release/tcp2udp
+          chmod +x target/${{ matrix.target }}/release/udp2tcp
+          # 创建一个独立目录存放产物，防止路径匹配失败
+          mkdir -p ./dist
+          cp target/${{ matrix.target }}/release/tcp2udp ./dist/
+          cp target/${{ matrix.target }}/release/udp2tcp ./dist/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: udp-over-tcp-${{ matrix.arch }}-musl
-          path: |
-            target/${{ matrix.target }}/release/tcp2udp
-            target/${{ matrix.target }}/release/udp2tcp
-
+          path: ./dist/
