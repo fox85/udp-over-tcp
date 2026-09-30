@@ -53,9 +53,10 @@ jobs:
           cargo build --release --target ${{ matrix.target }}
 
       - name: Upload Artifacts
-        uses: actions/artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: udp-over-tcp-${{ matrix.arch }}-musl
           path: |
             target/${{ matrix.target }}/release/tcp2udp
             target/${{ matrix.target }}/release/udp2tcp
+
