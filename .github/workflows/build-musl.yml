@@ -50,17 +50,10 @@ jobs:
 
       - name: Build Binary
         run: |
-          # 直接在根目录编译 udp2tcp
-          cargo build --release --target ${{ matrix.target }}
+          # 直接在根目录编译
+          cargo build --release --target \${{ matrix.target }}
           
-          # 创建独立产物目录并复制
+          # 创建独立产物目录并复制真正生成的二进制文件 `udp-over-tcp`
           mkdir -p ./dist
-          cp target/${{ matrix.target }}/release/udp2tcp ./dist/
-          chmod +x ./dist/udp2tcp
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: udp-over-tcp-${{ matrix.arch }}-musl
-          path: ./dist/
-
+          cp target/\${{ matrix.target }}/release/udp-over-tcp ./dist/
+          chmod +x ./dist/udp-over-tcp
